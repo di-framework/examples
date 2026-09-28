@@ -8,7 +8,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-if ! bun test --coverage --timeout 60000 >"$cov_log" 2>&1; then
+if ! NODE_OPTIONS="--preserve-symlinks" bun test --coverage --timeout 60000 >"$cov_log" 2>&1; then
   echo >&2
   echo "[pre-push] FAILED: the test/coverage command returned a non-zero exit status." >&2
   tail -n 120 "$cov_log" >&2 || true
