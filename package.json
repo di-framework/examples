@@ -32,10 +32,10 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "@di-framework/ai": "file:../ai/ai",
-    "@di-framework/ai-utils": "file:../ai/ai-utils",
-    "@di-framework/bindings": "file:../platform/platform/bindings",
-    "@di-framework/cli-plugin-platform": "file:../cli-extensions/packages/di-framework-cli-plugin-platform",
-    "@di-framework/platform": "file:../platform/platform/platform"
+    "@di-framework/ai": "^6",
+    "@di-framework/ai-utils": "^6",
+    "@di-framework/bindings": "^6",
+    "@di-framework/cli-plugin-platform": "file:../cli-extensions/packages/cli-plugin-platform",
+    "@di-framework/platform": "^6"
   }
 }

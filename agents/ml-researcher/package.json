@@ -12,7 +12,7 @@
   "dependencies": {
     "@di-framework/ai": "^6",
     "@di-framework/ai-utils": "^6",
-    "@di-framework/ml": "file:../../../di-framework-ml/packages/infer",
+    "@di-framework/ml": "^0.1.0",
     "@di-framework/tui": "workspace:*",
     "zod": "4.6.1"
   },

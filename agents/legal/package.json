@@ -24,7 +24,7 @@
     "@di-framework/ai-utils": "^6",
     "@di-framework/auth": "^5.3.7",
     "@di-framework/core": "^5.3.7",
-    "@di-framework/ml": "file:../../../di-framework-ml/packages/infer",
+    "@di-framework/ml": "^0.1.0",
     "@huggingface/tokenizers": "0.2.0",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "@di-framework/tui": "workspace:*"
