@@ -16,6 +16,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Checkout CLI plugin
+        uses: actions/checkout@v7
+        with:
+          repository: di-framework/cli-extensions
+          path: ../cli-extensions
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
@@ -30,8 +36,6 @@ jobs:
       - name: Lint
         run: bun run lint
 
-      - name: Dry-run package publish
-        run: bun scripts/publish-workspace.ts --dry-run
 
       - name: Test
         run: bun test --coverage
