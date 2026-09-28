@@ -1,7 +1,12 @@
 # di-framework/examples
 
-User-facing sample apps. Producer CI clones this remote, links PR packages, and runs the matching slice ([#495](https://github.com/di-framework/di-framework/issues/495)).
+User-facing sample apps. Library repos keep only CLI/unit-test fixtures (`init-tsc-inspect`, `test-example`).
 
-Workspaces: `framework/*`, `platform/*`, `adapters/*`, `agents/*`.
+| Workspace | Contents |
+| --- | --- |
+| `framework/*` | Portable SDK samples (http, graphql, auth, ai-*, deno, cf-worker, …) |
+| `platform/*` | warehouse, kube-apps, plugin-workspace, receipt-worker, actor-counter, … |
+| `adapters/*` | Foreign-platform samples (Cloud Foundry when added) |
+| `agents/*` | Former `di-framework/example-agents` |
 
-This tree is a bun workspace stub for the v6 split ([#485](https://github.com/di-framework/di-framework/issues/485)). Apps move here in the examples extract issue.
+Examples depend on published `@di-framework/*` packages. Producer CI clones this repo and links unpublished PR packages ([#495](https://github.com/di-framework/di-framework/issues/495)).

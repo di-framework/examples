@@ -1,0 +1,22 @@
+{
+  "name": "@di-framework/graphql-example",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun run index.ts",
+    "serve": "bun run server.ts",
+    "sdl": "bun run emit-sdl.ts",
+    "test": "bun test",
+    "build": "di-framework build",
+    "check": "di-framework check"
+  },
+  "devDependencies": {
+    "@di-framework/cli": "^5",
+    "@di-framework/core": "^5.3.7",
+    "@di-framework/graphql": "^5",
+    "@di-framework/socket": "^5",
+    "@di-framework/tsc": "^5",
+    "graphql": "^17.0.2"
+  }
+}

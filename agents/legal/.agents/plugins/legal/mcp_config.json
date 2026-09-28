@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "courtlistener": {
+      "command": "bun",
+      "args": ["${pluginDir}/mcp/caselaw.ts"],
+      "description": "CourtListener semantic search via DI Framework S3 Vectors, with local query embeddings and live import coverage."
+    },
+    "legal-skills-open": {
+      "command": "bun",
+      "args": ["${pluginDir}/mcp/server.ts"],
+      "description": "Read-only GitHub GraphQL catalog: pin a commit, navigate directories, and fetch legal skill and license text."
+    }
+  }
+}

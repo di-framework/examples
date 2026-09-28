@@ -1,3 +1,1 @@
-# agents
-
-Agent samples (from di-framework/example-agents).
+Sample agents (baseball, legal, ml-researcher) and `@di-framework/tui`.

@@ -1,0 +1,4 @@
+{
+  "name": "greeter",
+  "entry": "src/app.ts"
+}

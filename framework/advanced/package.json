@@ -1,0 +1,15 @@
+{
+  "name": "di-advanced-example",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "bun test",
+    "build": "di-framework build",
+    "check": "di-framework check"
+  },
+  "devDependencies": {
+    "@di-framework/cli": "^5",
+    "@di-framework/core": "^5.3.7",
+    "@di-framework/tsc": "^5"
+  }
+}

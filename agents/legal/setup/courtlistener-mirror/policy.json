@@ -1,0 +1,23 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3vectors:PutVectors"],
+      "Resource": "arn:aws:s3vectors:us-west-2:547107369396:bucket/courtlistener/index/modernbert-768"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": "arn:aws:s3:::courtlistener-import-547107369396-us-west-2/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["s3:PutObject"],
+      "Resource": [
+        "arn:aws:s3:::courtlistener-import-547107369396-us-west-2/imports/*",
+        "arn:aws:s3:::courtlistener-import-547107369396-us-west-2/chunks/*"
+      ]
+    }
+  ]
+}

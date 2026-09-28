@@ -9,6 +9,9 @@
   "workspaces": [
     "framework/*",
     "platform/*",
+    "platform/warehouse/packages/*",
+    "platform/kube-apps/apps/*",
+    "platform/plugin-workspace/services/*",
     "adapters/*",
     "agents/*"
   ],
@@ -27,5 +30,12 @@
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "@di-framework/ai": "file:../ai/ai",
+    "@di-framework/ai-utils": "file:../ai/ai-utils",
+    "@di-framework/bindings": "file:../platform/platform/bindings",
+    "@di-framework/cli-plugin-platform": "file:../cli-extensions/packages/di-framework-cli-plugin-platform",
+    "@di-framework/platform": "file:../platform/platform/platform"
   }
 }

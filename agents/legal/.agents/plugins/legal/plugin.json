@@ -1,0 +1,9 @@
+{
+  "name": "legal",
+  "displayName": "Legal — Jurisprudence, General, State, Constitutional, Civil Procedure, Case Reading, Case-Law Research",
+  "description": "Seven skills for jurisprudence, general legal work, state reference corpora, US constitutional supremacy analysis, civil procedure, case reading and case-law research, with a GitHub GraphQL practice catalog",
+  "version": "0.7.0",
+  "jurisdiction": "us",
+  "language": "en",
+  "license": "UNLICENSED"
+}

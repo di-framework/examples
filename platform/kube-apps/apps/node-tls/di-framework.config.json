@@ -1,0 +1,6 @@
+{
+  "name": "node-tls",
+  "entry": "src/app.ts",
+  "output": "dist/node-tls.wasm",
+  "allowedIpNameLookups": ["example.com"]
+}

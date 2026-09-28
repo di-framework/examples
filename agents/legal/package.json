@@ -1,0 +1,32 @@
+{
+  "name": "legal-agent",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  },
+  "scripts": {
+    "start": "bun src/index.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "intake": "bun src/index.ts --intake",
+    "embeddings:prepare": "bun scripts/prepare-embeddings.ts",
+    "embeddings:verify": "bun scripts/verify-embeddings.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1131.0",
+    "@aws-sdk/client-s3vectors": "^3.1131.0",
+    "@di-framework/ai": "^6",
+    "@di-framework/ai-utils": "^6",
+    "@di-framework/auth": "^5.3.7",
+    "@di-framework/core": "^5.3.7",
+    "@di-framework/ml": "file:../../../di-framework-ml/packages/infer",
+    "@huggingface/tokenizers": "0.2.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@di-framework/tui": "workspace:*"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@di-framework/example-authz",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "build": "di-framework build",
+    "check": "di-framework check"
+  },
+  "dependencies": {
+    "@di-framework/auth": "^5.3.7",
+    "@di-framework/authz": "^5.3.7",
+    "@di-framework/core": "^5.3.7",
+    "@di-framework/http": "^5.3.7"
+  },
+  "devDependencies": {
+    "@di-framework/cli": "^5",
+    "@di-framework/tsc": "^5"
+  }
+}

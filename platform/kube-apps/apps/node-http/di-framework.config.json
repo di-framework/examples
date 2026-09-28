@@ -1,0 +1,6 @@
+{
+  "name": "node-http",
+  "entry": "src/app.ts",
+  "output": "dist/node-http.wasm",
+  "allowedIpNameLookups": ["node-compat-echo.wasmcloud.svc.cluster.local"]
+}

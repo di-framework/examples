@@ -1,0 +1,19 @@
+{
+  "name": "@examples/receipt-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun src/dev.ts",
+    "start": "bun src/index.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@di-framework/core": "^5.3.7",
+    "@di-framework/queues": "^5.3.7"
+  },
+  "devDependencies": {
+    "@di-framework/cli-plugin-platform": "^6",
+    "@types/bun": "latest"
+  }
+}

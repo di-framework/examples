@@ -1,0 +1,23 @@
+{
+  "name": "baseball-agent",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun src/index.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "demo": "bun scripts/demo.ts"
+  },
+  "dependencies": {
+    "@di-framework/ai": "^6",
+    "zod": "4.6.1",
+    "@di-framework/tui": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  }
+}

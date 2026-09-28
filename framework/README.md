@@ -1,3 +1,1 @@
-# framework
-
-Portable SDK samples (http, graphql, auth, ai-*, deno, …).
+Portable SDK samples (http, graphql, auth, ai-*, deno, Cloudflare Workers, …).

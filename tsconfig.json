@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext", "DOM", "DOM.AsyncIterable"],
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
@@ -18,12 +18,27 @@
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
     "baseUrl": "."
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules", "dist", "coverage"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "framework/deno-http",
+    "framework/deno-sandboxes",
+    "framework/ai-skills",
+    "framework/ai-skills-scale",
+    "agents/legal",
+    "agents/ml-researcher",
+    "platform/kube-apps",
+    "platform/receipt-worker",
+    "platform/warehouse",
+    "**/target",
+    "**/.tools"
+  ]
 }

@@ -1,0 +1,13 @@
+{
+  "name": "@examples/warehouse-receive",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@di-framework/core": "^5.3.7",
+    "@di-framework/bindings": "^6"
+  }
+}

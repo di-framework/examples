@@ -1,3 +1,1 @@
-# platform
-
-wasmCloud / kube sample apps (warehouse, greeter, bindings, …).
+Platform samples: warehouse, kube-apps, plugin-workspace, workers, actor-counter.

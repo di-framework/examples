@@ -1,0 +1,25 @@
+{
+  "name": "ml-researcher-agent",
+  "private": true,
+  "type": "module",
+  "module": "src/index.ts",
+  "scripts": {
+    "start": "bun src/index.ts",
+    "test": "bun test ./tests",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "smoke": "bun scripts/smoke.ts"
+  },
+  "dependencies": {
+    "@di-framework/ai": "^6",
+    "@di-framework/ai-utils": "^6",
+    "@di-framework/ml": "file:../../../di-framework-ml/packages/infer",
+    "@di-framework/tui": "workspace:*",
+    "zod": "4.6.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  }
+}

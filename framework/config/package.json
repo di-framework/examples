@@ -1,0 +1,17 @@
+{
+  "name": "di-config-example",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "bun run index.ts",
+    "test": "bun test",
+    "build": "di-framework build",
+    "check": "di-framework check"
+  },
+  "devDependencies": {
+    "@di-framework/cli": "^5",
+    "@di-framework/config": "^5",
+    "@di-framework/core": "^5.3.7",
+    "@di-framework/tsc": "^5"
+  }
+}

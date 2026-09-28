@@ -1,0 +1,26 @@
+{
+  "name": "@di-framework/tui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "module": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./core": "./src/core.ts",
+    "./components": "./src/components.ts"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "demo": "bun examples/echo.ts"
+  },
+  "dependencies": {
+    "ink": "^4.1.0",
+    "marked": "^16.4.1",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.32",
+    "ink-testing-library": "^4.0.0"
+  }
+}
