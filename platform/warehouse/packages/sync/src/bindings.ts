@@ -1,5 +1,5 @@
-import { Container } from '@di-framework/core/decorators';
 import { KeyValue, Messaging, WasmCloudBinding } from '@di-framework/bindings';
+import { Container } from '@di-framework/core/decorators';
 
 @WasmCloudBinding('stock', { configFrom: 'di-tenant-stock' })
 @Container()

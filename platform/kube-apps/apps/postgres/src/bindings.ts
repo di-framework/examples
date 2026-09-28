@@ -1,5 +1,5 @@
-import { Container } from '@di-framework/core/decorators';
 import { Postgres, WasmCloudBinding } from '@di-framework/bindings';
+import { Container } from '@di-framework/core/decorators';
 
 @WasmCloudBinding('example-database', {
   config: { database: 'examples' },

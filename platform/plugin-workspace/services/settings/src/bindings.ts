@@ -1,5 +1,5 @@
-import { Container } from '@di-framework/core/decorators';
 import { Config, WasmCloudBinding } from '@di-framework/bindings';
+import { Container } from '@di-framework/core/decorators';
 
 @WasmCloudBinding('app-config')
 @Container()

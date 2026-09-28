@@ -1,5 +1,5 @@
-import { Container } from '@di-framework/core/decorators';
 import { KeyValue, Postgres, WasmCloudBinding } from '@di-framework/bindings';
+import { Container } from '@di-framework/core/decorators';
 
 @WasmCloudBinding('user-database')
 @Container()

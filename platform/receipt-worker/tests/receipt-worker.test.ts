@@ -2,6 +2,12 @@ import { afterEach, describe, expect, it } from 'bun:test';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import {
+  discoverQueueHandlers,
+  isQueueWorkerProject,
+  queueProjectRequirements,
+  renderWorkloadManifest,
+} from '@di-framework/cli-plugin-platform';
 import { Container } from '@di-framework/core';
 import {
   ContainerQueueDispatcher,
@@ -10,12 +16,6 @@ import {
   queue,
   SqliteQueueBackend,
 } from '@di-framework/queues';
-import {
-  discoverQueueHandlers,
-  isQueueWorkerProject,
-  queueProjectRequirements,
-  renderWorkloadManifest,
-} from '@di-framework/cli-plugin-platform';
 import { AuditLogService } from '../src/AuditLogService';
 import { ReceiptProcessor } from '../src/ReceiptProcessor';
 import { ReceiptProducer } from '../src/ReceiptProducer';
