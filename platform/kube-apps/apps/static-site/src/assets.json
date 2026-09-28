@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-09T00:00:00.000Z",
+  "directory": "public",
+  "assets": {
+    "/index.html": {
+      "path": "/index.html",
+      "contentType": "text/html; charset=utf-8",
+      "size": 82,
+      "hash": "7b271e8b827fd13516004375ded10752b81540a29767e4caea038dffd35050bd",
+      "etag": "\"7b271e8b827fd13516004375ded10752\"",
+      "content": "<!doctype html><title>DI Framework static assets</title><h1>Packaged on main</h1>\n",
+      "encoding": "utf-8"
+    },
+    "/style.css": {
+      "path": "/style.css",
+      "contentType": "text/css; charset=utf-8",
+      "size": 53,
+      "hash": "d05eebfb6900a5a2787b39c710a800aef91c597fc6c1aec59cc413298ef9542f",
+      "etag": "\"d05eebfb6900a5a2787b39c710a800ae\"",
+      "content": "body {\n  font-family: system-ui;\n  color: #17445c;\n}\n",
+      "encoding": "utf-8"
+    },
+    "/info.json": {
+      "path": "/info.json",
+      "contentType": "application/json; charset=utf-8",
+      "size": 51,
+      "hash": "88c31c34616088e3ffee1df87f070145f32cee38fde256df7c8c238e26f04a75",
+      "etag": "\"88c31c34616088e3ffee1df87f070145\"",
+      "content": "{ \"release\": \"5.3.1-candidate\", \"packaged\": true }\n",
+      "encoding": "utf-8"
+    },
+    "/data.bin": {
+      "path": "/data.bin",
+      "contentType": "application/octet-stream",
+      "size": 4,
+      "hash": "6d6f7836f1e146dc0204afb5133dae52fdc05603d8ac2dc793b481b0e0829fd1",
+      "etag": "\"6d6f7836f1e146dc0204afb5133dae52\"",
+      "content": "AP+ACg==",
+      "encoding": "base64"
+    }
+  }
+}
