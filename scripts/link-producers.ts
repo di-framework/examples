@@ -7,20 +7,32 @@ export interface PackageEntry {
   peerDependencies?: Record<string, string>;
 }
 
+const SINGLETON_PEER_DEPENDENCIES = new Set(['graphql']);
+
 export function resolvePackageDirectory(startDir: string, packageName: string): string | undefined {
-  const res = Bun.spawnSync(
-    ['bun', '-e', `console.log(import.meta.resolve("${packageName}"))`],
-    { cwd: startDir },
-  );
+  const res = Bun.spawnSync(['bun', '-e', `console.log(import.meta.resolve("${packageName}"))`], {
+    cwd: startDir,
+  });
   if (res.exitCode !== 0 || !res.stdout.toString().trim()) return undefined;
   const rawUrl = res.stdout.toString().trim();
   try {
     const filePath = new URL(rawUrl).pathname;
     let current = dirname(filePath);
-    while (current !== '/' && !existsSync(resolve(current, 'package.json'))) {
+    while (current !== '/' && current !== '.') {
+      const pkgJsonPath = resolve(current, 'package.json');
+      if (existsSync(pkgJsonPath)) {
+        try {
+          const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));
+          if (pkg.name === packageName) {
+            return current;
+          }
+        } catch {
+          // ignore error and continue up
+        }
+      }
       current = dirname(current);
     }
-    return existsSync(resolve(current, 'package.json')) ? current : undefined;
+    return undefined;
   } catch {
     return undefined;
   }
@@ -124,18 +136,19 @@ export async function linkProducers(
     manifest.overrides[name] = `link:${name}`;
   }
 
-  // Link external peer dependencies required by packages (e.g. graphql)
+  // Link external singleton peer dependencies required by packages (e.g. graphql)
   const processedPeers = new Set<string>();
-  const primaryPackageNames = new Set(allPackages.map((p) => p.name));
   for (const { directory, peerDependencies } of allPackages) {
     if (!peerDependencies) continue;
     for (const peerName of Object.keys(peerDependencies)) {
-      if (primaryPackageNames.has(peerName) || processedPeers.has(peerName)) continue;
+      if (!SINGLETON_PEER_DEPENDENCIES.has(peerName) || processedPeers.has(peerName)) continue;
       processedPeers.add(peerName);
 
       const peerDir = resolvePackageDirectory(directory, peerName);
       if (peerDir) {
-        console.log(`Registering bun link for peer dependency ${peerName} in ${peerDir}...`);
+        console.log(
+          `Registering bun link for singleton peer dependency ${peerName} in ${peerDir}...`,
+        );
         const peerChild = Bun.spawn(['bun', 'link'], {
           cwd: peerDir,
           stdout: 'inherit',
