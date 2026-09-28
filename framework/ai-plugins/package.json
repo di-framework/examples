@@ -1,6 +1,6 @@
 {
   "name": "@di-framework/ai-plugins-example",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "private": true,
   "type": "module",
   "description": "Official @di-framework/plugin discovery and MCP wiring example for @di-framework/ai-utils",
