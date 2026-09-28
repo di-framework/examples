@@ -1,9 +1,29 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 
 export interface PackageEntry {
   name: string;
   directory: string;
+  peerDependencies?: Record<string, string>;
+}
+
+export function resolvePackageDirectory(startDir: string, packageName: string): string | undefined {
+  const res = Bun.spawnSync(
+    ['bun', '-e', `console.log(import.meta.resolve("${packageName}"))`],
+    { cwd: startDir },
+  );
+  if (res.exitCode !== 0 || !res.stdout.toString().trim()) return undefined;
+  const rawUrl = res.stdout.toString().trim();
+  try {
+    const filePath = new URL(rawUrl).pathname;
+    let current = dirname(filePath);
+    while (current !== '/' && !existsSync(resolve(current, 'package.json'))) {
+      current = dirname(current);
+    }
+    return existsSync(resolve(current, 'package.json')) ? current : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export function discoverProducerPackages(producerPath: string): PackageEntry[] {
@@ -23,7 +43,11 @@ export function discoverProducerPackages(producerPath: string): PackageEntry[] {
       if (!existsSync(pkgJsonPath)) continue;
       const pkg = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));
       if (pkg.name) {
-        results.push({ name: pkg.name, directory: resolve(packagesDir, entry.name) });
+        results.push({
+          name: pkg.name,
+          directory: resolve(packagesDir, entry.name),
+          peerDependencies: pkg.peerDependencies,
+        });
       }
     }
   } else {
@@ -31,7 +55,11 @@ export function discoverProducerPackages(producerPath: string): PackageEntry[] {
     if (existsSync(rootPkgJson)) {
       const pkg = JSON.parse(readFileSync(rootPkgJson, 'utf8'));
       if (pkg.name) {
-        results.push({ name: pkg.name, directory: absPath });
+        results.push({
+          name: pkg.name,
+          directory: absPath,
+          peerDependencies: pkg.peerDependencies,
+        });
       }
     }
   }
@@ -94,6 +122,31 @@ export async function linkProducers(
 
   for (const { name } of allPackages) {
     manifest.overrides[name] = `link:${name}`;
+  }
+
+  // Link external peer dependencies required by packages (e.g. graphql)
+  const processedPeers = new Set<string>();
+  const primaryPackageNames = new Set(allPackages.map((p) => p.name));
+  for (const { directory, peerDependencies } of allPackages) {
+    if (!peerDependencies) continue;
+    for (const peerName of Object.keys(peerDependencies)) {
+      if (primaryPackageNames.has(peerName) || processedPeers.has(peerName)) continue;
+      processedPeers.add(peerName);
+
+      const peerDir = resolvePackageDirectory(directory, peerName);
+      if (peerDir) {
+        console.log(`Registering bun link for peer dependency ${peerName} in ${peerDir}...`);
+        const peerChild = Bun.spawn(['bun', 'link'], {
+          cwd: peerDir,
+          stdout: 'inherit',
+          stderr: 'inherit',
+        });
+        const peerExit = await peerChild.exited;
+        if (peerExit === 0) {
+          manifest.overrides[peerName] = `link:${peerName}`;
+        }
+      }
+    }
   }
 
   await Bun.write(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);

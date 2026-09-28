@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { discoverProducerPackages } from '../scripts/link-producers';
+import { discoverProducerPackages, resolvePackageDirectory } from '../scripts/link-producers';
 
 describe('link-producers helper', () => {
   let tempDir: string;
@@ -55,5 +55,16 @@ describe('link-producers helper', () => {
   it('throws when producer path does not exist', () => {
     const nonexistent = join(tempDir, 'nonexistent');
     expect(() => discoverProducerPackages(nonexistent)).toThrow('Producer path not found');
+  });
+
+  it('resolves installed package directory from start directory', () => {
+    const pkgDir = resolvePackageDirectory(process.cwd(), 'typescript');
+    expect(pkgDir).toBeDefined();
+    expect(pkgDir?.endsWith('typescript')).toBe(true);
+  });
+
+  it('returns undefined for non-existent package', () => {
+    const pkgDir = resolvePackageDirectory(process.cwd(), 'non-existent-pkg-xyz');
+    expect(pkgDir).toBeUndefined();
   });
 });
