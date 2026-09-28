@@ -37,7 +37,7 @@ From this example, rebuild the platform packages in the sibling checkouts:
 
 ```sh
 bun run --cwd ../../../platform/platform/platform build
-bun run --cwd ../../../cli-extensions/packages/di-framework-cli-plugin-platform build
+bun run --cwd ../../../cli-extensions/packages/cli-plugin-platform build
 export KUBECONFIG="$(../di-framework-kube/bin/di-framework-kube kubeconfig)"
 cd examples/warehouse
 bun run deploy

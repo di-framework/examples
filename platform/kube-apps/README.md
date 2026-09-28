@@ -379,8 +379,8 @@ bun install --frozen-lockfile
 bun run check
 bun test  # 42 passed
 (cd ../../../cli-extensions && bun test --timeout 30000 \
-  packages/di-framework-cli-plugin-platform/tests/node-compat-tls.test.ts \
-  packages/di-framework-cli-plugin-platform/tests/wash-dev.test.ts)
+  packages/cli-plugin-platform/tests/node-compat-tls.test.ts \
+  packages/cli-plugin-platform/tests/wash-dev.test.ts)
 # 17 passed; the longer runner timeout accommodates component bundling.
 ```
 
