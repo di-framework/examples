@@ -16,9 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Checkout CLI plugin
-        run: git clone --depth 1 https://github.com/di-framework/cli-extensions.git "$GITHUB_WORKSPACE/../cli-extensions"
-
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
