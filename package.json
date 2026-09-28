@@ -35,7 +35,7 @@
     "@di-framework/ai": "^6",
     "@di-framework/ai-utils": "^6",
     "@di-framework/bindings": "^6",
-    "@di-framework/cli-plugin-platform": "file:../cli-extensions/packages/cli-plugin-platform",
+    "@di-framework/cli-plugin-platform": "^6",
     "@di-framework/platform": "^6"
   }
 }
