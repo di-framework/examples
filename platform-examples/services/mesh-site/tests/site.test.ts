@@ -72,7 +72,7 @@ describe('mesh site', () => {
   test('answers an unknown path with JSON', async () => {
     const response = await handle(new Request('http://mesh-site/missing'));
     expect(response.status).toBe(404);
-    expect(await response.json()).toEqual({ error: 'Not found' });
+    expect((await response.json()) as Record<string, unknown>).toEqual({ error: 'Not found' });
   });
 
   test('reads the catalog through the private binding and hides raw traffic', async () => {
@@ -93,7 +93,7 @@ describe('mesh site', () => {
     try {
       const response = await handle(new Request('http://mesh-site/api/catalog'));
       expect(response.status).toBe(200);
-      const body = await response.json();
+      const body = (await response.json()) as Record<string, unknown>;
       expect(body.traffic).toEqual([
         {
           topic: 'msh/US/2/e/LongFast/!abcd',

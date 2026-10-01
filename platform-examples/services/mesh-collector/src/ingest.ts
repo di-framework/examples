@@ -130,8 +130,8 @@ function mapEvent(
 function positionOf(payload: Uint8Array): { latitude: number; longitude: number } | undefined {
   try {
     const position = fromBinary(Mesh.PositionSchema, payload);
-    const latitude = degrees(position.latitudeI);
-    const longitude = degrees(position.longitudeI);
+    const latitude = degrees(position.latitudeI ?? 0);
+    const longitude = degrees(position.longitudeI ?? 0);
     if (latitude === 0 && longitude === 0) return undefined;
     return { latitude, longitude };
   } catch {
