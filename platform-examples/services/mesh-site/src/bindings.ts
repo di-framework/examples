@@ -8,8 +8,11 @@ import {
 } from '@di-framework/core/service-bindings';
 import { type CatalogSnapshot, readBlobCatalog } from './catalog';
 
-/** Unnamed host blobstore. mesh-collector writes the container `mesh`. */
-@WasmCloudBinding('objects')
+/**
+ * Blobstore service `mesh-objects`, bound as `objects`. Both mesh members use the container
+ * `mesh`; the platform projects the store's NATS URL into ConfigMap `di-binding-objects`.
+ */
+@WasmCloudBinding('objects', { configFrom: 'di-binding-objects' })
 @Container()
 export class MeshObjects extends Blobstore {}
 
