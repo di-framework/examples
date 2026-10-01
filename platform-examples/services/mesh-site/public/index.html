@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mesh</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Mesh</h1>
+      <button id="refresh" type="button">Refresh</button>
+    </header>
+    <p id="status">Loading the catalog.</p>
+
+    <section>
+      <h2>Locations</h2>
+      <div id="mesh-map"></div>
+      <table id="maps">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Short</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Hardware</th>
+            <th>Firmware</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Traffic</h2>
+      <table id="traffic">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Topic</th>
+            <th>Gateway</th>
+            <th>Channel</th>
+            <th>From</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Encrypted</h2>
+      <table id="stats">
+        <thead>
+          <tr>
+            <th>Topic</th>
+            <th>Gateway</th>
+            <th>Channel</th>
+            <th>From</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/assets/app.js"></script>
+  </body>
+</html>

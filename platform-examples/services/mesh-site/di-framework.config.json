@@ -1,0 +1,6 @@
+{
+  "name": "mesh-site",
+  "entry": "src/index.ts",
+  "workload": "mesh",
+  "persistentStorage": true
+}

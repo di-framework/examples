@@ -1,0 +1,6 @@
+name: di-framework-wasmcloud-plugin-workspace-a3508002db
+runtime:
+  name: nodejs
+  options:
+    typescript: true
+description: Isolated local wasmCloud platform. Application resources are owned by the DI Framework CLI.

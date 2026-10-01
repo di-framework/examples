@@ -1,0 +1,13 @@
+{
+  "name": "@platform-examples/mesh-collector",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.16.0",
+    "@di-framework/bindings": "^6.0.1",
+    "@di-framework/core": "^6.0.1",
+    "@meshtastic/protobufs": "^2.8.0",
+    "mqtt": "^5.16.0"
+  }
+}
