@@ -82,7 +82,9 @@ export async function program() {
       apiVersion: 'platform.di-framework.dev/v1alpha1',
       kind: 'BackingService',
       metadata: { name: OBJECTS_SERVICE, namespace: `di-tenant-${TENANT}`, annotations: ready },
-      spec: { type: 'blobstore', deletionPolicy: 'Delete' },
+      // The collector rewrites its objects every few seconds; the class default of 128Mi
+      // gets the NATS server OOM-killed under that churn.
+      spec: { type: 'blobstore', deletionPolicy: 'Delete', parameters: { memory: '512Mi' } },
     },
     { provider: tenant },
   );

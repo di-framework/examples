@@ -128,7 +128,11 @@ stackTest('creates the shared blobstore as the tenant before deploying', () => {
     name: 'mesh-objects',
     namespace: 'di-tenant-meshtastic',
   });
-  expect(service?.inputs.spec).toEqual({ type: 'blobstore', deletionPolicy: 'Delete' });
+  expect(service?.inputs.spec).toEqual({
+    type: 'blobstore',
+    deletionPolicy: 'Delete',
+    parameters: { memory: '512Mi' },
+  });
   const binding = resources.find((r) => r.type.endsWith(':ServiceBinding'));
   expect(binding?.inputs.spec).toEqual({
     serviceName: 'mesh-objects',
