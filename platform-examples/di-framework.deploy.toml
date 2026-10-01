@@ -1,12 +1,12 @@
 # Tenant credential for these examples. Set KUBECONFIG to that tenant's kubeconfig.
-default-target = "warehouse"
+default-target = "meshtastic"
 
-[targets.warehouse]
+[targets.meshtastic]
 kubeconfig = "${KUBECONFIG}"
-namespace = "di-tenant-warehouse"
-hostgroup = "tenant-warehouse"
+namespace = "di-tenant-meshtastic"
+hostgroup = "tenant-meshtastic"
 
-[targets.warehouse.registry]
+[targets.meshtastic.registry]
 push = "http://127.0.0.1:25000"
 pull = "di-framework-registry.wasmcloud.svc.cluster.local:5000"
 insecure = true

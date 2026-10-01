@@ -4,11 +4,11 @@ Applications for the di-framework platform plugin. Each service is its own proje
 
 ```bash
 export KUBECONFIG=/path/to/tenant.kubeconfig
-di-framework platform deploy mesh-collector --target warehouse
-di-framework platform deploy mesh-site --target warehouse
+di-framework platform deploy mesh-collector --target meshtastic
+di-framework platform deploy mesh-site --target meshtastic
 ```
 
-`--target warehouse` selects the tenant credential in `di-framework.deploy.toml`: namespace `di-tenant-warehouse`, host group `tenant-warehouse`.
+`--target meshtastic` selects the tenant credential in `di-framework.deploy.toml`: namespace `di-tenant-meshtastic`, host group `tenant-meshtastic`.
 
 Both services set `workload` to `mesh`. They share the host blobstore container `mesh` through an unnamed `wasmcloud:blobstore` binding named `objects`. The collector writes `traffic.jsonl`, `maps.jsonl`, and `stats.json` in that container, and the site reads them. `persistentStorage` stays false because this tenant cannot mount host volumes.
 
