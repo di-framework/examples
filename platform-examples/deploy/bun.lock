@@ -18,7 +18,7 @@
     },
   },
   "packages": {
-    "@di-framework/platform": ["@di-framework/platform@./vendor/di-framework-platform-6.0.2.tgz", { "dependencies": { "@pulumi/command": "1.2.1", "@pulumi/kubernetes": "4.34.0", "@pulumi/pulumi": "3.261.0", "js-yaml": "4.3.2" } }, "sha512-62l+GUj7S7Pm7bxsk0PyZaBG5gbz/krMMUK1cQ1KL/hYR/r2WxBbh7UctMetFtK9pxzB9FD+/nSFSEmPzyLwFg=="],
+    "@di-framework/platform": ["@di-framework/platform@./vendor/di-framework-platform-6.0.2.tgz", { "dependencies": { "@pulumi/command": "1.2.1", "@pulumi/kubernetes": "4.34.0", "@pulumi/pulumi": "3.261.0", "js-yaml": "4.3.2" } }, "sha512-qqospkgpfPlLUvJLi69+G8nJmHeOkGETaRh9WA4rviP54pdBEyL9+VZ4U2bMzzeC39wh+L9GHlcSsUAwJbOncw=="],
 
     "@gar/promise-retry": ["@gar/promise-retry@1.0.3", "", {}, "sha512-GmzA9ckNokPypTg10pgpeHNQe7ph+iIKKmhKu3Ob9ANkswreCx7R3cKmY781K8QK3AqVL3xVh9A42JvIAbkkSA=="],
 
