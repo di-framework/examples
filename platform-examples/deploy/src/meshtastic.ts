@@ -10,6 +10,8 @@ export const SITE_HOST = 'mesh-site';
 /** Blobstore service both members bind as `objects` (see each service's src/bindings.ts). */
 export const OBJECTS_SERVICE = 'mesh-objects';
 export const OBJECTS_BINDING = 'objects';
+/** The `workload` both services set in di-framework.config.json; the console's application. */
+export const WORKLOAD = 'mesh';
 
 /** Directories that hold build output or installed packages, never sources. */
 const SKIPPED = new Set(['node_modules', 'dist', '.di-framework', 'coverage']);

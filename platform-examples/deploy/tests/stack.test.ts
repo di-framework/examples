@@ -138,6 +138,7 @@ stackTest('creates the shared blobstore as the tenant before deploying', () => {
     serviceName: 'mesh-objects',
     bindingName: 'objects',
     capability: 'blobstore',
+    workloadName: 'mesh',
   });
   expect(binding?.inputs.metadata.annotations).toEqual({ 'pulumi.com/waitFor': 'condition=Ready' });
 });

@@ -18,6 +18,7 @@ import {
   sourceHash,
   TENANT,
   USER,
+  WORKLOAD,
 } from './meshtastic';
 
 const TENANT_TYPE = 'kubernetes:platform.di-framework.dev/v1alpha1:Tenant';
@@ -94,7 +95,13 @@ export async function program() {
       apiVersion: 'platform.di-framework.dev/v1alpha1',
       kind: 'ServiceBinding',
       metadata: { name: OBJECTS_BINDING, namespace: `di-tenant-${TENANT}`, annotations: ready },
-      spec: { serviceName: OBJECTS_SERVICE, bindingName: OBJECTS_BINDING, capability: 'blobstore' },
+      // workloadName ties the binding to the `mesh` application in the console.
+      spec: {
+        serviceName: OBJECTS_SERVICE,
+        bindingName: OBJECTS_BINDING,
+        capability: 'blobstore',
+        workloadName: WORKLOAD,
+      },
     },
     { provider: tenant, dependsOn: [objects] },
   );
