@@ -1,0 +1,33 @@
+name: platform-examples-meshtastic
+description: Local platform and the Meshtastic example (mesh-collector + mesh-site) in one stack.
+runtime:
+  name: nodejs
+  options:
+    typescript: true
+    packagemanager: bun
+backend:
+  url: file://./.pulumi-state
+config:
+  tenants:
+    value:
+      - name: meshtastic
+  users:
+    value:
+      - name: dev
+        memberships:
+          - tenant: meshtastic
+            role: developer
+  # mesh-collector reaches the public Meshtastic MQTT broker; the platform admin approves it.
+  egressAllowedDestinations:
+    value:
+      - mqtt.meshtastic.org:1883
+  # wash 2.8.0 built with wasi-tls (tenant-host/), pushed to the cluster registry by this stack.
+  tenantHostImage:
+    value: 127.0.0.1:30500/di-framework/wash:2.8.0-wasi-tls
+  # The cluster pulls Docker Hub images through Google's public mirror first and falls back to
+  # Docker Hub itself. This avoids Docker Hub's anonymous rate limit and TLS problems some VMs
+  # have reaching auth.docker.io.
+  registryMirrors:
+    value:
+      docker.io:
+        - https://mirror.gcr.io

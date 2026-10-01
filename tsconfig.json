@@ -38,6 +38,7 @@
     "platform/kube-apps",
     "platform/receipt-worker",
     "platform/warehouse",
+    "platform-examples/deploy",
     "**/target",
     "**/.tools"
   ]

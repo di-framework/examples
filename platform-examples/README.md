@@ -1,16 +1,61 @@
 # Platform examples
 
-Applications for the di-framework platform plugin. Each service is its own project under `services/` and is deployed with the platform CLI, not by hand.
+The Meshtastic example: `mesh-collector` reads the public Meshtastic MQTT feed and `mesh-site` shows it as a live map and traffic table. One `pulumi up` creates a local platform with tenant `meshtastic` and deploys both services into it.
 
-```bash
-export KUBECONFIG=/path/to/tenant.kubeconfig
-di-framework platform deploy mesh-collector --target meshtastic
-di-framework platform deploy mesh-site --target meshtastic
+## Run it
+
+You need [Bun](https://bun.sh), [Pulumi](https://www.pulumi.com/docs/install/), Docker or Podman, and the `di-framework` CLI with the platform plugin.
+
+```sh
+export PULUMI_CONFIG_PASSPHRASE=meshtastic   # any value; it encrypts this stack's secrets
+cd deploy
+bun install
+pulumi up
 ```
 
-`--target meshtastic` selects the tenant credential in `di-framework.deploy.toml`: namespace `di-tenant-meshtastic`, host group `tenant-meshtastic`.
+`bun install` creates stack `dev` in `deploy/.pulumi-state` and records whether this machine uses `docker` or `podman`. `pulumi up` then:
 
-Both services set `workload` to `mesh`. They share the host blobstore container `mesh` through an unnamed `wasmcloud:blobstore` binding named `objects`. The collector writes `traffic.jsonl`, `maps.jsonl`, and `stats.json` in that container, and the site reads them. `persistentStorage` stays false because this tenant cannot mount host volumes.
+1. Starts k0s in a container, with a registry on `127.0.0.1:25000` and the HTTP gateway on `127.0.0.1:28180`.
+2. Builds the tenant host image (`deploy/tenant-host`: wash 2.8.0 with `wasi-tls`, which `mesh-collector` needs) and pushes it to that registry. The first build compiles wash and takes about ten minutes; later runs use the build cache.
+3. Creates tenant `meshtastic` and user `dev`, approves the collector's egress to `mqtt.meshtastic.org:1883`, and creates the `mesh-objects` blobstore service the two services share.
+4. Writes the `dev` kubeconfig to `deploy/.tenant-meshtastic-dev.kubeconfig` (git-ignored).
+5. Deploys `mesh-collector` and `mesh-site` with `di-framework platform deploy`. Changing a service's sources and running `pulumi up` again redeploys it.
+
+When it finishes, open the printed URL:
+
+```sh
+pulumi stack output meshSiteUrl   # http://mesh-site.meshtastic.localhost:28180/
+```
+
+The map and traffic table fill in within a few minutes, once the collector has heard from the mesh.
+
+## Tenant console
+
+```sh
+eval "$(pulumi stack output console)"
+```
+
+That runs `di-framework platform console` from this directory with the generated kubeconfig. It prints `Console listening on http://127.0.0.1:<port>`; open that URL. The console shows the `mesh` application, its logs, and links to its routes.
+
+## Clean up
+
+```sh
+pulumi destroy
+```
+
+This removes the cluster container, its volumes and network, and the kubeconfig files.
+
+## Deploying by hand
+
+`di-framework.deploy.toml` has one target, `meshtastic`, set as `default-target`. `tenant = "meshtastic"` selects namespace `di-tenant-meshtastic` and host group `tenant-meshtastic`. With a tenant kubeconfig:
+
+```sh
+export KUBECONFIG=/path/to/tenant.kubeconfig
+di-framework platform deploy mesh-collector
+di-framework platform deploy mesh-site
+```
+
+Both services set `workload` to `mesh`. They share the blobstore container `mesh` through a `blobstore-nats` backing service, `mesh-objects`, bound as `objects`: each binding class selects the projected `di-binding-objects` ConfigMap with `configFrom`. `deploy/` creates the service and binding before it deploys the services. Without `configFrom` the host would give each service its own in-memory store and the site would never see the collector's files. The collector writes `traffic.jsonl`, `maps.jsonl`, and `stats.json` in that container, and the site reads them. `persistentStorage` stays false: the data lives in the backing service.
 
 ## mesh-collector
 
@@ -21,6 +66,8 @@ A long-lived service. It subscribes to the public Meshtastic MQTT broker and wri
 - `stats.json` — counts of still-encrypted LongFast envelopes. Those payloads are not decoded.
 
 `MQTT_URL`, `MQTT_USERNAME`, `MQTT_PASSWORD`, and `MQTT_TOPICS` override the public broker defaults. `MQTT_TOPICS` is a comma-separated list. `MQTT_CLIENT_ID` overrides the generated client id.
+
+The collector declares `allowedIpNameLookups: ["mqtt.meshtastic.org"]`. On a tenant target the CLI turns that into an `egress` backing service and binding; the platform grants the connection once an administrator approves the destination (`egressAllowedDestinations` in `deploy/Pulumi.yaml`). Pointing `MQTT_URL` at another broker needs that broker approved the same way.
 
 ## mesh-site
 

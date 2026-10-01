@@ -1,10 +1,9 @@
-# Tenant credential for these examples. Set KUBECONFIG to that tenant's kubeconfig.
+# Tenant credential for these examples. `deploy/` writes the kubeconfig and sets KUBECONFIG.
 default-target = "meshtastic"
 
 [targets.meshtastic]
 kubeconfig = "${KUBECONFIG}"
-namespace = "di-tenant-meshtastic"
-hostgroup = "tenant-meshtastic"
+tenant = "meshtastic"
 
 [targets.meshtastic.registry]
 push = "http://127.0.0.1:25000"
