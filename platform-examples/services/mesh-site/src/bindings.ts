@@ -1,3 +1,4 @@
+import { Blobstore, WasmCloudBinding } from '@di-framework/bindings';
 import { useContainer } from '@di-framework/core/container';
 import { Container } from '@di-framework/core/decorators';
 import {
@@ -5,7 +6,12 @@ import {
   ServiceBinding,
   ServiceBindingRuntime,
 } from '@di-framework/core/service-bindings';
-import { type CatalogSnapshot, catalogDirectory, readCatalog } from './catalog';
+import { type CatalogSnapshot, readBlobCatalog } from './catalog';
+
+/** Unnamed host blobstore. mesh-collector writes the container `mesh`. */
+@WasmCloudBinding('objects')
+@Container()
+export class MeshObjects extends Blobstore {}
 
 export type CatalogApi = {
   snapshot(): Promise<CatalogSnapshot>;
@@ -27,7 +33,7 @@ ServiceBindingRuntime.current.configure({
 @ExportService({ name: 'mesh-catalog', operations: ['snapshot'] })
 export class MeshCatalog {
   async snapshot(): Promise<CatalogSnapshot> {
-    return readCatalog(catalogDirectory(process.env));
+    return readBlobCatalog(useContainer().resolve(MeshObjects));
   }
 }
 

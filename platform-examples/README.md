@@ -10,11 +10,11 @@ di-framework platform deploy mesh-site --target warehouse
 
 `--target warehouse` selects the tenant credential in `di-framework.deploy.toml`: namespace `di-tenant-warehouse`, host group `tenant-warehouse`.
 
-Both services set `workload` to `mesh` and `persistentStorage` to true, so they share `/var/lib/di-framework/storage/mesh`. Inside the guest that directory is `DI_STORAGE_DIR` (normally `/data`).
+Both services set `workload` to `mesh`. They share the host blobstore container `mesh` through an unnamed `wasmcloud:blobstore` binding named `objects`. The collector writes `traffic.jsonl`, `maps.jsonl`, and `stats.json` in that container, and the site reads them. `persistentStorage` stays false because this tenant cannot mount host volumes.
 
 ## mesh-collector
 
-A long-lived service. It subscribes to the public Meshtastic MQTT broker and writes three files under the shared storage directory:
+A long-lived service. It subscribes to the public Meshtastic MQTT broker and writes three objects in the shared blobstore container:
 
 - `traffic.jsonl` — one JSON object per `ServiceEnvelope`: `topic`, `gatewayId`, `channelId`, `from`, `ts`, and `raw` (the original bytes, base64).
 - `maps.jsonl` — one latest place per node. Map reports on `/2/map/` carry the node name and a coarse latitude and longitude. Cleartext position packets on LongFast do the same, labeled with the node id. Encrypted packets stay off this list.

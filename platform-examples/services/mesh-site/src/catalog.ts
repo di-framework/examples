@@ -1,6 +1,12 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+/** Shared catalog container written by mesh-collector. */
+export const MESH_CONTAINER = 'mesh';
+const TRAFFIC_OBJECT = 'traffic.jsonl';
+const MAPS_OBJECT = 'maps.jsonl';
+const STATS_OBJECT = 'stats.json';
+
 export type MapView = {
   topic: string;
   ts: string;
@@ -44,11 +50,46 @@ export function catalogDirectory(env: Env): string {
 }
 
 export async function readCatalog(directory: string): Promise<CatalogSnapshot> {
-  const [maps, traffic, stats] = await Promise.all([
-    readJsonLines(join(directory, 'maps.jsonl'), isMapView),
-    readJsonLines(join(directory, 'traffic.jsonl'), isTrafficRecord),
-    readStats(join(directory, 'stats.json')),
+  const [mapsText, trafficText, statsText] = await Promise.all([
+    readFile(join(directory, 'maps.jsonl'), 'utf8').catch(() => ''),
+    readFile(join(directory, 'traffic.jsonl'), 'utf8').catch(() => ''),
+    readFile(join(directory, 'stats.json'), 'utf8').catch(() => ''),
   ]);
+  return catalogFromText(mapsText, trafficText, statsText);
+}
+
+type MeshContainer = {
+  objectInfo(name: string): Promise<unknown>;
+  getData(name: string, start: number, end: number): Promise<unknown>;
+};
+
+type MeshBlobstore = {
+  getContainer(name: string): Promise<unknown>;
+  createContainer(name: string): Promise<unknown>;
+};
+
+/** Read the collector's blobstore objects. A missing container or object is an empty catalog. */
+export async function readBlobCatalog(blobstore: MeshBlobstore): Promise<CatalogSnapshot> {
+  try {
+    const container = await openMeshContainer(blobstore);
+    const [mapsText, trafficText, statsText] = await Promise.all([
+      readObject(container, MAPS_OBJECT),
+      readObject(container, TRAFFIC_OBJECT),
+      readObject(container, STATS_OBJECT),
+    ]);
+    return catalogFromText(mapsText ?? '', trafficText ?? '', statsText ?? '');
+  } catch {
+    return { maps: [], traffic: [], stats: [] };
+  }
+}
+
+function catalogFromText(
+  mapsText: string,
+  trafficText: string,
+  statsText: string,
+): CatalogSnapshot {
+  const maps = parseLines(mapsText, isMapView);
+  const traffic = parseLines(trafficText, isTrafficRecord);
   return {
     maps: maps.slice(-MAP_LIMIT),
     traffic: traffic.slice(-TRAFFIC_LIMIT).map((record) => ({
@@ -58,20 +99,11 @@ export async function readCatalog(directory: string): Promise<CatalogSnapshot> {
       from: record.from,
       ts: record.ts,
     })),
-    stats,
+    stats: parseStats(statsText),
   };
 }
 
-async function readJsonLines<T>(
-  path: string,
-  accept: (value: unknown) => value is T,
-): Promise<T[]> {
-  let text = '';
-  try {
-    text = await readFile(path, 'utf8');
-  } catch {
-    return [];
-  }
+function parseLines<T>(text: string, accept: (value: unknown) => value is T): T[] {
   const rows: T[] = [];
   for (const line of text.split('\n')) {
     if (line.trim().length === 0) continue;
@@ -79,20 +111,70 @@ async function readJsonLines<T>(
       const parsed = JSON.parse(line) as unknown;
       if (accept(parsed)) rows.push(parsed);
     } catch {
-      // A torn write at the end of the file is not a record.
+      // A torn write at the end of the object is not a record.
     }
   }
   return rows;
 }
 
-async function readStats(path: string): Promise<StatView[]> {
+function parseStats(text: string): StatView[] {
+  if (text.trim().length === 0) return [];
   try {
-    const parsed = JSON.parse(await readFile(path, 'utf8')) as unknown;
+    const parsed = JSON.parse(text) as unknown;
     if (!Array.isArray(parsed)) return [];
     return parsed.filter(isStatView);
   } catch {
     return [];
   }
+}
+
+type BlobResult = { tag?: string; val?: unknown };
+
+function unwrap<T>(value: unknown): T {
+  if (value && typeof value === 'object' && 'tag' in value) {
+    const result = value as BlobResult;
+    if (result.tag === 'err') throw new Error(`blobstore ${JSON.stringify(result.val)}`);
+    if (result.tag === 'ok') return result.val as T;
+  }
+  return value as T;
+}
+
+async function openMeshContainer(blobstore: MeshBlobstore): Promise<MeshContainer> {
+  try {
+    return unwrap<MeshContainer>(await blobstore.getContainer(MESH_CONTAINER));
+  } catch {
+    try {
+      return unwrap<MeshContainer>(await blobstore.createContainer(MESH_CONTAINER));
+    } catch {
+      return unwrap<MeshContainer>(await blobstore.getContainer(MESH_CONTAINER));
+    }
+  }
+}
+
+async function readObject(container: MeshContainer, name: string): Promise<string | undefined> {
+  try {
+    const info = unwrap<{ size?: number | bigint }>(await container.objectInfo(name));
+    const size = Number(info.size ?? 0);
+    if (!Number.isFinite(size) || size <= 0) return '';
+    const body = unwrap<AsyncIterable<Uint8Array | number>>(await container.getData(name, 0, size));
+    return await streamText(body);
+  } catch {
+    return undefined;
+  }
+}
+
+async function streamText(stream: AsyncIterable<Uint8Array | number>): Promise<string> {
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream) {
+    chunks.push(typeof chunk === 'number' ? Uint8Array.of(chunk) : chunk);
+  }
+  const bytes = new Uint8Array(chunks.reduce((total, chunk) => total + chunk.length, 0));
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return new TextDecoder().decode(bytes);
 }
 
 function isMapView(value: unknown): value is MapView {

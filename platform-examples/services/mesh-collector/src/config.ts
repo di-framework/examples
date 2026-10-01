@@ -23,8 +23,3 @@ export function collectorConfig(env: Env, pid: number, now: number): CollectorCo
     topics: topics.length > 0 ? topics : [...DEFAULT_TOPICS],
   };
 }
-
-/** Platform persistent workloads set DI_STORAGE_DIR. Local runs can set MESH_DATA_DIR. */
-export function storageDirectory(env: Env): string {
-  return env.DI_STORAGE_DIR || env.MESH_DATA_DIR || 'data';
-}

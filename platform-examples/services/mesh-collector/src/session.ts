@@ -1,7 +1,10 @@
-import { connect, type MqttClient } from 'mqtt';
-import { type CollectorConfig, collectorConfig, type Env, storageDirectory } from './config';
+import type { MqttClient } from 'mqtt';
+// Package export "import" selects the browser bundle, which does not export connect.
+import { connect } from '../node_modules/mqtt/build/mqtt.js';
+import { MeshObjects } from './bindings';
+import { type CollectorConfig, collectorConfig, type Env } from './config';
 import { ingest, nodeId } from './ingest';
-import { type CollectorStore, openDirectoryStore } from './store';
+import { type CollectorStore, openBlobStore } from './store';
 
 export type MqttLike = {
   on(event: 'connect', listener: () => void): void;
@@ -102,7 +105,7 @@ export function runSession(
 
 export async function runCollector(deps: CollectorDeps = defaultDeps()): Promise<void> {
   const config = collectorConfig(deps.env, deps.pid, deps.now());
-  const store = deps.store ?? (await openDirectoryStore(storageDirectory(deps.env)));
+  const store = deps.store ?? (await openBlobStore(new MeshObjects()));
   for (;;) {
     const client = deps.connect(config);
     try {

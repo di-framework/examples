@@ -142,3 +142,151 @@ function sameStat(left: Omit<TrafficStat, 'count'>, right: Omit<TrafficStat, 'co
     left.from === right.from
   );
 }
+
+/** Shared catalog container. mesh-site reads the same objects. */
+export const MESH_CONTAINER = 'mesh';
+const TRAFFIC_OBJECT = 'traffic.jsonl';
+const MAPS_OBJECT = 'maps.jsonl';
+const STATS_OBJECT = 'stats.json';
+const TRAFFIC_CAP = 200;
+
+type BlobResult = { tag?: string; val?: unknown };
+
+type MeshContainer = {
+  objectInfo(name: string): Promise<unknown>;
+  getData(name: string, start: number, end: number): Promise<unknown>;
+  writeData(name: string, data: AsyncIterable<Uint8Array>): Promise<unknown>;
+};
+
+type MeshBlobstore = {
+  getContainer(name: string): Promise<unknown>;
+  createContainer(name: string): Promise<unknown>;
+};
+
+function unwrap<T>(value: unknown): T {
+  if (value && typeof value === 'object' && 'tag' in value) {
+    const result = value as BlobResult;
+    if (result.tag === 'err') throw new Error(`blobstore ${JSON.stringify(result.val)}`);
+    if (result.tag === 'ok') return result.val as T;
+  }
+  return value as T;
+}
+
+async function* byteStream(value: string): AsyncGenerator<Uint8Array> {
+  yield new TextEncoder().encode(value);
+}
+
+async function streamText(stream: AsyncIterable<Uint8Array | number>): Promise<string> {
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream) {
+    chunks.push(typeof chunk === 'number' ? Uint8Array.of(chunk) : chunk);
+  }
+  const bytes = new Uint8Array(chunks.reduce((total, chunk) => total + chunk.length, 0));
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return new TextDecoder().decode(bytes);
+}
+
+async function openMeshContainer(blobstore: MeshBlobstore): Promise<MeshContainer> {
+  try {
+    return unwrap<MeshContainer>(await blobstore.getContainer(MESH_CONTAINER));
+  } catch {
+    try {
+      return unwrap<MeshContainer>(await blobstore.createContainer(MESH_CONTAINER));
+    } catch {
+      return unwrap<MeshContainer>(await blobstore.getContainer(MESH_CONTAINER));
+    }
+  }
+}
+
+async function readObject(container: MeshContainer, name: string): Promise<string | undefined> {
+  try {
+    const info = unwrap<{ size?: number | bigint }>(await container.objectInfo(name));
+    const size = Number(info.size ?? 0);
+    if (!Number.isFinite(size) || size <= 0) return '';
+    // The blobstore probe reads with end equal to the byte length.
+    const body = unwrap<AsyncIterable<Uint8Array | number>>(await container.getData(name, 0, size));
+    return await streamText(body);
+  } catch {
+    return undefined;
+  }
+}
+
+async function writeObject(container: MeshContainer, name: string, body: string): Promise<void> {
+  unwrap(await container.writeData(name, byteStream(body)));
+}
+
+/** Collector writes. mesh-site reads the same container through its own binding. */
+export async function openBlobStore(blobstore: MeshBlobstore): Promise<CollectorStore> {
+  const container = await openMeshContainer(blobstore);
+  let chain = Promise.resolve();
+  const enqueue = <T>(work: () => Promise<T>): Promise<T> => {
+    const run = chain.then(work, work);
+    chain = run.then(
+      () => undefined,
+      () => undefined,
+    );
+    return run;
+  };
+  return {
+    saveTraffic(record) {
+      return enqueue(async () => {
+        const lines = ((await readObject(container, TRAFFIC_OBJECT)) ?? '')
+          .split('\n')
+          .filter((line) => line.trim().length > 0);
+        lines.push(JSON.stringify(record));
+        const kept = lines.slice(-TRAFFIC_CAP);
+        await writeObject(container, TRAFFIC_OBJECT, `${kept.join('\n')}\n`);
+      });
+    },
+    saveMap(event) {
+      return enqueue(async () => {
+        const maps = parseMaps(await readObject(container, MAPS_OBJECT));
+        const index = maps.findIndex((entry) => samePlace(entry, event));
+        if (index >= 0) maps[index] = event;
+        else maps.push(event);
+        const body = maps.map((entry) => JSON.stringify(entry)).join('\n');
+        await writeObject(container, MAPS_OBJECT, `${body}\n`);
+      });
+    },
+    addEncrypted(stat) {
+      return enqueue(async () => {
+        const stats = parseStats(await readObject(container, STATS_OBJECT));
+        const found = stats.find((entry) => sameStat(entry, stat));
+        if (found) found.count += 1;
+        else stats.push({ ...stat, count: 1 });
+        await writeObject(container, STATS_OBJECT, JSON.stringify(stats));
+      });
+    },
+  };
+}
+
+function parseStats(text: string | undefined): TrafficStat[] {
+  if (text === undefined || text.trim().length === 0) return [];
+  try {
+    const parsed = JSON.parse(text) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(isStat);
+  } catch {
+    return [];
+  }
+}
+
+function parseMaps(text: string | undefined): MapEvent[] {
+  if (text === undefined) return [];
+  const maps: MapEvent[] = [];
+  for (const line of text.split('\n')) {
+    if (line.trim().length === 0) continue;
+    try {
+      const parsed = JSON.parse(line) as MapEvent;
+      if (typeof parsed.longName === 'string' && typeof parsed.shortName === 'string')
+        maps.push(parsed);
+    } catch {
+      // A torn write is not a place.
+    }
+  }
+  return maps;
+}

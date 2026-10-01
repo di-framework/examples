@@ -2,6 +2,6 @@
   "name": "mesh-collector",
   "entry": "src/index.ts",
   "workload": "mesh",
-  "persistentStorage": true,
+  "persistentStorage": false,
   "allowedIpNameLookups": ["mqtt.meshtastic.org"]
 }
