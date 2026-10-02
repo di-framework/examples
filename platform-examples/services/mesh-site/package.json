@@ -1,0 +1,14 @@
+{
+  "name": "@platform-examples/mesh-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "package-assets": "bun scripts/package-assets.ts"
+  },
+  "dependencies": {
+    "@di-framework/bindings": "^6.0.1",
+    "@di-framework/core": "^6.0.1",
+    "@di-framework/http": "^6.0.1"
+  }
+}

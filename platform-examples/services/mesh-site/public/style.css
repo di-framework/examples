@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: #1b2838;
+  background: #f4f7fb;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #16324f;
+  color: #fff;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+header button {
+  background: #fff;
+  color: #16324f;
+  border: 0;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+}
+
+main,
+section {
+  margin: 1rem 1.5rem;
+  overflow-x: auto;
+}
+
+#status {
+  margin: 1rem 1.5rem 0;
+}
+
+#mesh-map {
+  height: 420px;
+  margin-top: 0.5rem;
+  background: #d5dee8;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  margin-top: 0.5rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid #d5dee8;
+  vertical-align: top;
+}
+
+th {
+  font-size: 0.85rem;
+  color: #526275;
+}
+
+.empty {
+  color: #526275;
+}

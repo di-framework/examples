@@ -1,0 +1,10 @@
+config:
+  di-framework-wasmcloud-plugin-workspace-a3508002db:tenants:
+    - name: warehouse
+      deletionPolicy: Retain
+  di-framework-wasmcloud-plugin-workspace-a3508002db:users:
+    - name: alice
+      memberships:
+        - tenant: warehouse
+          role: developer
+encryptionsalt:

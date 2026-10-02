@@ -1,0 +1,7 @@
+{
+  "name": "mesh-collector",
+  "entry": "src/index.ts",
+  "workload": "mesh",
+  "persistentStorage": false,
+  "allowedIpNameLookups": ["mqtt.meshtastic.org"]
+}
