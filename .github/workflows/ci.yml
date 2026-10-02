@@ -24,6 +24,13 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      # These examples install on their own so their lockfiles and overrides
+      # stay independent of the repository workspace.
+      - name: Install standalone example dependencies
+        run: |
+          bun install --frozen-lockfile --cwd platform-examples
+          bun install --frozen-lockfile --cwd platform/plugin-workspace/deploy/platform
+
       - name: Typecheck
         run: bun run typecheck
 
