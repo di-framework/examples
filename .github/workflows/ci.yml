@@ -29,6 +29,7 @@ jobs:
       - name: Install standalone example dependencies
         run: |
           bun install --frozen-lockfile --cwd platform-examples
+          bun install --frozen-lockfile --cwd platform-examples/deploy
           bun install --frozen-lockfile --cwd platform/plugin-workspace/deploy/platform
 
       - name: Typecheck
