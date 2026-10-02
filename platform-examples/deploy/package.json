@@ -1,0 +1,21 @@
+{
+  "name": "platform-examples-deploy",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "postinstall": "bun scripts/stack.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@di-framework/platform": "file:./vendor/di-framework-platform-6.0.2.tgz",
+    "@pulumi/command": "1.2.1",
+    "@pulumi/kubernetes": "4.34.0",
+    "@pulumi/pulumi": "3.261.0",
+    "typescript": "5.9.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "22.18.0"
+  }
+}

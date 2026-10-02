@@ -1,0 +1,8 @@
+node_modules/
+.pulumi-state/
+# Stack config holds this machine's encryption salt and container CLI.
+Pulumi.*.yaml
+.kubeconfig-*
+.tenant-*.kubeconfig
+# The platform package is vendored until @di-framework/platform 6.0.2 is on npm.
+!vendor/*.tgz
