@@ -10,6 +10,7 @@ import { draftToGameLog, parseGameLog } from './game-log.ts';
 import { runInteractive, runSpectatorInteractive } from './interactive.ts';
 import { recordLive } from './live.ts';
 import { resolveLiveUrl } from './live-capture.ts';
+import { fieldPoseLayer, loadPoseDirectory, parseCalibration } from './pose/index.ts';
 import { formatRecordingSummary } from './review.ts';
 import { createBaseballSpectator } from './spectator.ts';
 import { BaseballStore } from './store.ts';
@@ -30,6 +31,15 @@ export { draftToGameLog, parseGameLog } from './game-log.ts';
 export type { LiveRecordOptions } from './live.ts';
 export { recordLive } from './live.ts';
 export { isLiveStreamUrl, resolveLiveUrl } from './live-capture.ts';
+export type { DiamondCalibration, FieldPoseData, PoseSample } from './pose/index.ts';
+export {
+  fieldPoseLayer,
+  loadPoseDirectory,
+  measureFieldPose,
+  parseCalibration,
+  parseOpenPoseDocument,
+  runOpenPose,
+} from './pose/index.ts';
 export { formatRecordingSummary } from './review.ts';
 export { createBaseballSpectator } from './spectator.ts';
 export { BaseballStore } from './store.ts';
@@ -81,6 +91,8 @@ if (import.meta.main) {
         output: { type: 'string' },
         stats: { type: 'boolean' },
         mode: { type: 'string' },
+        'pose-dir': { type: 'string' },
+        calibration: { type: 'string' },
       },
     });
     if (values.help) {
@@ -90,7 +102,8 @@ if (import.meta.main) {
        bun start --live --demo [--max-seconds N]   # lavfi test pattern, no OBS
        bun start --record path/to/game.mp4 [--output game.json] [--duration all|SECONDS]
                  [--start SECONDS] [--fps 0.5..2] [--mode sideline|broadcast]
-       bun start --enhance path/to/game.json [--with summary] [--output game.json]
+       bun start --enhance path/to/game.json [--with summary|field-pose] [--output game.json]
+                 [--pose-dir DIR --calibration bases.json]   # required for field-pose
        bun start --video path/to/game.mp4   # short observer sample (default 120s)
        bun start --stats                    # legacy season-tracker chat
        bun start --photo|--report|--export  # legacy helpers
@@ -98,7 +111,8 @@ if (import.meta.main) {
 Spectator records observations into a durable game log (not a season book).
 --live pulls an OBS RTSP/RTMP/SRT URL (LIVE_URL in .env, or --url) into short segments until Ctrl+C.
 --record defaults to the full finished file. ffmpeg/ffprobe required. Codex sign-in for vision.
-Add models later: bun start --enhance game.json --with summary`);
+Add models later: bun start --enhance game.json --with summary
+Field pose: bun start --enhance game.json --with field-pose --pose-dir DIR --calibration bases.json`);
     } else {
       const mode = values.mode === 'broadcast' ? 'broadcast' : ('sideline' as const);
       if (values.mode && values.mode !== 'sideline' && values.mode !== 'broadcast')
@@ -131,6 +145,8 @@ Add models later: bun start --enhance game.json --with summary`);
         throw new Error('--demo, --url, --segment, and --max-seconds require --live');
       if (values.live && !values.demo && !resolveLiveUrl(values.url))
         throw new Error('Live capture needs LIVE_URL in .env, --url rtsp://…, or --demo');
+      if ((values['pose-dir'] || values.calibration) && !values.enhance)
+        throw new Error('--pose-dir and --calibration require --enhance --with field-pose');
 
       const databasePath = resolve(
         values.data ?? resolve(import.meta.dir, '../data/baseball.sqlite'),
@@ -204,13 +220,28 @@ Add models later: bun start --enhance game.json --with summary`);
         const path = resolve(values.enhance);
         const output = resolve(values.output ?? path);
         const withId = values.with ?? 'summary';
-        if (withId !== 'summary') throw new Error('Supported --with values: "summary"');
         const log = parseGameLog(JSON.parse(await readFile(path, 'utf8')));
-        const chat = createChatModel({
-          provider: 'openai',
-          auth: 'subscription',
-        });
-        const enhanced = await applyEnhancers(log, [summaryLayer(chat)]);
+        const enhanced = await (async () => {
+          if (withId === 'summary') {
+            if (values['pose-dir'] || values.calibration)
+              throw new Error('--pose-dir and --calibration require --with field-pose');
+            const chat = createChatModel({
+              provider: 'openai',
+              auth: 'subscription',
+            });
+            return applyEnhancers(log, [summaryLayer(chat)]);
+          }
+          if (withId === 'field-pose') {
+            if (!values['pose-dir'] || !values.calibration)
+              throw new Error('--with field-pose requires --pose-dir and --calibration');
+            const calibration = parseCalibration(
+              JSON.parse(await readFile(resolve(values.calibration), 'utf8')),
+            );
+            const samples = await loadPoseDirectory(resolve(values['pose-dir']));
+            return applyEnhancers(log, [fieldPoseLayer(samples, calibration)]);
+          }
+          throw new Error('Supported --with values: "summary", "field-pose"');
+        })();
         await checkpointJson(output, enhanced);
         console.log(formatRecordingSummary(enhanced));
       } else if (values.video) {
