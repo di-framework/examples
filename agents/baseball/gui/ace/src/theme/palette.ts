@@ -1,0 +1,21 @@
+/** Color tokens used inside inline style props. This module is not a stylesheet. */
+export const palette = {
+  field: '#0e1712',
+  bandTop: '#173528',
+  bandBottom: '#10261c',
+  ink: '#e8f2eb',
+  muted: '#8aa396',
+  faint: '#6e8878',
+  line: '#2d4a3c',
+  tick: '#6d8f7c',
+  mark: '#f0b429',
+  markInk: '#1a1406',
+  card: '#15261c',
+  chip: '#1a2c22',
+  runner: '#d4b483',
+  fielder: '#8ec3db',
+  battery: '#e07a5f',
+  danger: '#e07a5f',
+  bar: '#3d5c4c',
+  tab: '#102117',
+} as const;

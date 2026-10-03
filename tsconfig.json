@@ -35,6 +35,7 @@
     "framework/ai-skills-scale",
     "agents/legal",
     "agents/ml-researcher",
+    "agents/baseball/gui",
     "platform/kube-apps",
     "platform/receipt-worker",
     "platform/warehouse",
