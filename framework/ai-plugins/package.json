@@ -16,8 +16,8 @@
     "@di-framework/ai-utils": "^6",
     "@di-framework/core": "^5.3.7",
     "@di-framework/examples-shared": "workspace:*",
-    "@di-framework/plugin": "^1.1.0",
-    "@modelcontextprotocol/sdk": "^1.30.0"
+    "@di-framework/plugin": "^1.1.3",
+    "@modelcontextprotocol/sdk": "^1.32.1"
   },
   "devDependencies": {
     "@di-framework/cli": "^5",
