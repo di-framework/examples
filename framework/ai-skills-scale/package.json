@@ -20,11 +20,11 @@
   "dependencies": {
     "@di-framework/ai": "^6",
     "@di-framework/ai-utils": "^6",
-    "@di-framework/core": "^5.3.7",
+    "@di-framework/core": "^6.0.6",
     "@di-framework/examples-shared": "workspace:*"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "typescript": "^5"
+    "typescript": "^7"
   }
 }

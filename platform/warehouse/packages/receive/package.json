@@ -7,7 +7,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@di-framework/core": "^5.3.7",
+    "@di-framework/core": "^6.0.6",
     "@di-framework/bindings": "^6"
   }
 }

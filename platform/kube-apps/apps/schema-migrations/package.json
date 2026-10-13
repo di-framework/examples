@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@di-framework/core": "^5.3.7",
-    "@di-framework/http": "^5.3.7",
-    "@di-framework/repo": "^5.3.7"
+    "@di-framework/core": "^6.0.6",
+    "@di-framework/http": "^6.0.6",
+    "@di-framework/repo": "^6.0.6"
   }
 }

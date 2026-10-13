@@ -11,9 +11,9 @@
     "@di-framework/services-example": "workspace:*"
   },
   "devDependencies": {
-    "@di-framework/cli": "^5",
-    "@di-framework/core": "^5.3.7",
-    "@di-framework/http": "^5.3.7",
-    "@di-framework/tsc": "^5"
+    "@di-framework/cli": "^6",
+    "@di-framework/core": "^6.0.6",
+    "@di-framework/http": "^6.0.6",
+    "@di-framework/tsc": "^6"
   }
 }

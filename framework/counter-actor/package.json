@@ -10,10 +10,10 @@
     "check": "bun x tsc --noEmit"
   },
   "dependencies": {
-    "@di-framework/actors": "^5.3.7"
+    "@di-framework/actors": "^6.0.6"
   },
   "devDependencies": {
-    "@di-framework/cli": "^5",
+    "@di-framework/cli": "^6",
     "@types/bun": "latest"
   }
 }

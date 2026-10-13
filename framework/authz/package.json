@@ -9,13 +9,13 @@
     "check": "di-framework check"
   },
   "dependencies": {
-    "@di-framework/auth": "^5.3.7",
-    "@di-framework/authz": "^5.3.7",
-    "@di-framework/core": "^5.3.7",
-    "@di-framework/http": "^5.3.7"
+    "@di-framework/auth": "^6.0.6",
+    "@di-framework/authz": "^6.0.6",
+    "@di-framework/core": "^6.0.6",
+    "@di-framework/http": "^6.0.6"
   },
   "devDependencies": {
-    "@di-framework/cli": "^5",
-    "@di-framework/tsc": "^5"
+    "@di-framework/cli": "^6",
+    "@di-framework/tsc": "^6"
   }
 }

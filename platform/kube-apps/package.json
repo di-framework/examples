@@ -19,20 +19,20 @@
     "verify:features": "bun scripts/verify-features.ts"
   },
   "dependencies": {
-    "@di-framework/core": "^5.3.7",
-    "@di-framework/http": "^5.3.7",
-    "@di-framework/actors": "^5.3.7",
-    "@di-framework/queues": "^5.3.7",
-    "@di-framework/repo": "^5.3.7",
+    "@di-framework/core": "^6.0.6",
+    "@di-framework/http": "^6.0.6",
+    "@di-framework/actors": "^6.0.6",
+    "@di-framework/queues": "^6.0.6",
+    "@di-framework/repo": "^6.0.6",
     "@di-framework/bindings": "^6"
   },
   "devDependencies": {
-    "@di-framework/cli": "^5",
-    "@di-framework/cli-extension": "^5",
+    "@di-framework/cli": "^6",
+    "@di-framework/cli-extension": "^6",
     "@di-framework/cli-plugin-platform": "^6",
     "@types/bun": "1.3.14",
     "rolldown": "1.2.7",
-    "typescript": "5.9.3"
+    "typescript": "7.0.2"
   },
   "repository": {
     "type": "git",

@@ -15,12 +15,12 @@
     "demo": "bun examples/echo.ts"
   },
   "dependencies": {
-    "ink": "^4.1.0",
-    "marked": "^16.4.1",
-    "react": "^18.2.0"
+    "ink": "^8.0.0",
+    "marked": "^18.1.0",
+    "react": "^19.3.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.32",
+    "@types/react": "^19.3.0",
     "ink-testing-library": "^4.0.0"
   }
 }

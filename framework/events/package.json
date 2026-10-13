@@ -9,9 +9,9 @@
     "check": "di-framework check"
   },
   "devDependencies": {
-    "@di-framework/cli": "^5",
-    "@di-framework/core": "^5.3.7",
-    "@di-framework/events": "^5",
-    "@di-framework/tsc": "^5"
+    "@di-framework/cli": "^6",
+    "@di-framework/core": "^6.0.6",
+    "@di-framework/events": "^6",
+    "@di-framework/tsc": "^6"
   }
 }
