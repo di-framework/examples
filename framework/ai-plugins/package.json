@@ -14,15 +14,15 @@
   "dependencies": {
     "@di-framework/ai": "^6",
     "@di-framework/ai-utils": "^6",
-    "@di-framework/core": "^5.3.7",
+    "@di-framework/core": "^6.1.0",
     "@di-framework/examples-shared": "workspace:*",
     "@di-framework/plugin": "^1.1.0",
     "@modelcontextprotocol/sdk": "^1.30.0"
   },
   "devDependencies": {
-    "@di-framework/cli": "^5",
-    "@di-framework/tsc": "^5",
+    "@di-framework/cli": "^6",
+    "@di-framework/tsc": "^6",
     "@types/bun": "latest",
-    "typescript": "^5"
+    "typescript": "^7"
   }
 }
