@@ -12,7 +12,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@di-framework/core": "^5.3.7",
+    "@di-framework/core": "^6.1.0",
     "@di-framework/bindings": "^6",
     "@examples/warehouse-receive": "workspace:*",
     "@examples/warehouse-sync": "workspace:*",

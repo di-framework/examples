@@ -12,11 +12,11 @@
     "check": "di-framework check"
   },
   "devDependencies": {
-    "@di-framework/cli": "^5",
-    "@di-framework/core": "^5.3.7",
-    "@di-framework/graphql": "^5",
-    "@di-framework/socket": "^5",
-    "@di-framework/tsc": "^5",
+    "@di-framework/cli": "^6",
+    "@di-framework/core": "^6.1.0",
+    "@di-framework/graphql": "^6",
+    "@di-framework/socket": "^6",
+    "@di-framework/tsc": "^6",
     "graphql": "^17.0.2"
   }
 }

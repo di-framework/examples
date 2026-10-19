@@ -7,7 +7,7 @@
     "build": "bun ../../scripts/prepare-features.ts && ../../node_modules/.bin/di-framework platform build"
   },
   "dependencies": {
-    "@di-framework/core": "^5.3.7",
-    "@di-framework/http": "^5.3.7"
+    "@di-framework/core": "^6.1.0",
+    "@di-framework/http": "^6.1.0"
   }
 }
