@@ -18,15 +18,15 @@
     "embeddings:verify": "bun scripts/verify-embeddings.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1131.0",
-    "@aws-sdk/client-s3vectors": "^3.1131.0",
+    "@aws-sdk/client-s3": "^3.1156.0",
+    "@aws-sdk/client-s3vectors": "^3.1156.0",
     "@di-framework/ai": "^6",
     "@di-framework/ai-utils": "^6",
     "@di-framework/auth": "^5.3.7",
     "@di-framework/core": "^5.3.7",
     "@di-framework/ml": "^0.1.0",
     "@huggingface/tokenizers": "0.2.0",
-    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "@di-framework/tui": "workspace:*"
   },
   "version": "6.0.2"
